@@ -40,3 +40,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Exposed so WebApplicationFactory<Program> in the test project can boot this app in-memory.
+public partial class Program { }
