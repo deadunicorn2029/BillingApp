@@ -27,6 +27,8 @@ public class MockGatewayBTests
         var sut = new MockGatewayB();
         var order = new Order { OrderNumber = "ORD-1", UserId = "user-1", PayableAmount = 10m, PaymentGatewayId = sut.GatewayId };
 
+        // MockGatewayB declines ~20% of the time at random; run enough attempts to exercise
+        // both branches while only asserting the invariant, not the exact ratio (avoids flakiness).
         for (var i = 0; i < 50; i++)
         {
             var result = await sut.ChargeAsync(order);
