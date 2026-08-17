@@ -1,0 +1,74 @@
+.page {
+  max-width: 480px;
+  margin: 2rem auto;
+  font-family: system-ui, sans-serif;
+  padding: 0 1rem;
+}
+
+.order-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.9rem;
+  }
+
+  input,
+  select {
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+
+  button {
+    margin-top: 0.5rem;
+    padding: 0.6rem;
+    font-size: 1rem;
+    cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+}
+
+.field-error {
+  color: #c0392b;
+  font-size: 0.8rem;
+}
+
+.result {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 4px;
+
+  &.success {
+    background: #eafaf1;
+    border: 1px solid #2ecc71;
+  }
+
+  &.error {
+    background: #fdecea;
+    border: 1px solid #e74c3c;
+  }
+
+  h2,
+  h3 {
+    margin: 0 0 0.75rem;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem 1rem;
+    margin: 0;
+  }
+}
