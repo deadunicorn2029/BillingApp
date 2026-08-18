@@ -78,9 +78,9 @@ public class OrdersApiTests : IClassFixture<TestWebApplicationFactory>
     }
 
     [Fact]
-    public async Task GetOpenApiDocument_ReturnsOk()
+    public async Task GetSwaggerDocument_ReturnsOk()
     {
-        var response = await _client.GetAsync("/openapi/v1.json");
+        var response = await _client.GetAsync("/swagger/v1/swagger.json");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
