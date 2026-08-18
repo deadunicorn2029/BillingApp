@@ -1,4 +1,4 @@
-using BillingApp.Application.Models;
+using BillingApp.Infrastructure.Models;
 using BillingApp.Infrastructure.PaymentGateways;
 using Xunit;
 

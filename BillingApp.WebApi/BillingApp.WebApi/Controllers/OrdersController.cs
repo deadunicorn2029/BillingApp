@@ -1,5 +1,5 @@
+using BillingApp.Application.Dtos;
 using BillingApp.Application.Interfaces;
-using BillingApp.Application.Models;
 using BillingApp.WebApi.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,11 +17,11 @@ public sealed class OrdersController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(Receipt), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(OrderReceipt), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status402PaymentRequired)]
     public async Task<IActionResult> SubmitOrder([FromBody] SubmitOrderRequest request, CancellationToken ct)
     {
-        var order = new Order
+        var orderRequest = new OrderRequest
         {
             OrderNumber = request.OrderNumber,
             UserId = request.UserId,
@@ -30,7 +30,7 @@ public sealed class OrdersController : ControllerBase
             Description = request.Description
         };
 
-        var result = await _orderProcessingService.ProcessAsync(order, ct);
+        var result = await _orderProcessingService.ProcessAsync(orderRequest, ct);
 
         return result.Success
             ? Ok(result.Receipt)

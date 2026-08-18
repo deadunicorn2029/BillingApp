@@ -1,6 +1,6 @@
-namespace BillingApp.Application.Models;
+namespace BillingApp.Application.Dtos;
 
-public sealed class Order
+public sealed class OrderRequest
 {
     public required string OrderNumber { get; init; }
     public required string UserId { get; init; }

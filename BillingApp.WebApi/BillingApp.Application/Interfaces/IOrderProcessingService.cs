@@ -1,8 +1,8 @@
-using BillingApp.Application.Models;
+using BillingApp.Application.Dtos;
 
 namespace BillingApp.Application.Interfaces;
 
 public interface IOrderProcessingService
 {
-    Task<OrderProcessingResult> ProcessAsync(Order order, CancellationToken ct = default);
+    Task<OrderResult> ProcessAsync(OrderRequest request, CancellationToken ct = default);
 }

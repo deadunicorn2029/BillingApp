@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
-using BillingApp.Application.Interfaces;
-using BillingApp.Application.Models;
+using BillingApp.Infrastructure.Interfaces;
+using BillingApp.Infrastructure.Models;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace BillingApp.Infrastructure.Caching;

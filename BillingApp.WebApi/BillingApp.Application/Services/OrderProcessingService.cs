@@ -1,5 +1,7 @@
+using BillingApp.Application.Dtos;
 using BillingApp.Application.Interfaces;
-using BillingApp.Application.Models;
+using BillingApp.Infrastructure.Interfaces;
+using BillingApp.Infrastructure.Models;
 
 namespace BillingApp.Application.Services;
 
@@ -16,8 +18,21 @@ public sealed class OrderProcessingService : IOrderProcessingService
         _idempotencyCache = idempotencyCache;
     }
 
-    public Task<OrderProcessingResult> ProcessAsync(Order order, CancellationToken ct = default) =>
-        _idempotencyCache.GetOrProcessAsync(order.OrderNumber, () => ChargeAsync(order, ct), ct);
+    public async Task<OrderResult> ProcessAsync(OrderRequest request, CancellationToken ct = default)
+    {
+        var order = new Order
+        {
+            OrderNumber = request.OrderNumber,
+            UserId = request.UserId,
+            PayableAmount = request.PayableAmount,
+            PaymentGatewayId = request.PaymentGatewayId,
+            Description = request.Description
+        };
+
+        var result = await _idempotencyCache.GetOrProcessAsync(order.OrderNumber, () => ChargeAsync(order, ct), ct);
+
+        return ToOrderResult(result);
+    }
 
     private async Task<OrderProcessingResult> ChargeAsync(Order order, CancellationToken ct)
     {
@@ -52,4 +67,20 @@ public sealed class OrderProcessingService : IOrderProcessingService
 
         return new OrderProcessingResult { Success = true, Receipt = receipt };
     }
+
+    private static OrderResult ToOrderResult(OrderProcessingResult result) =>
+        new()
+        {
+            Success = result.Success,
+            ErrorMessage = result.ErrorMessage,
+            Receipt = result.Receipt is null
+                ? null
+                : new OrderReceipt
+                {
+                    OrderNumber = result.Receipt.OrderNumber,
+                    Amount = result.Receipt.Amount,
+                    Timestamp = result.Receipt.Timestamp,
+                    ConfirmationCode = result.Receipt.ConfirmationCode
+                }
+        };
 }

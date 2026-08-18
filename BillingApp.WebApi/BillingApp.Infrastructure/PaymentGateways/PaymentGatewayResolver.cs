@@ -1,4 +1,4 @@
-using BillingApp.Application.Interfaces;
+using BillingApp.Infrastructure.Interfaces;
 
 namespace BillingApp.Infrastructure.PaymentGateways;
 
