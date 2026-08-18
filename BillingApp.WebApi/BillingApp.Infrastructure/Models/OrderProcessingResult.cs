@@ -1,4 +1,5 @@
-namespace BillingApp.Application.Models;
+
+namespace BillingApp.Infrastructure.Models;
 
 public sealed class OrderProcessingResult
 {

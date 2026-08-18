@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BillingApp.Application\BillingApp.Application.csproj" />
-    <ProjectReference Include="..\BillingApp.Infrastructure\BillingApp.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

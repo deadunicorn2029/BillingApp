@@ -1,4 +1,4 @@
-namespace BillingApp.Application.Interfaces;
+namespace BillingApp.Infrastructure.Interfaces;
 
 public interface IPaymentGatewayResolver
 {

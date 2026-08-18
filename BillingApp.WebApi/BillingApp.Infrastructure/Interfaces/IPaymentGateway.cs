@@ -1,6 +1,6 @@
-using BillingApp.Application.Models;
+using BillingApp.Infrastructure.Models;
 
-namespace BillingApp.Application.Interfaces;
+namespace BillingApp.Infrastructure.Interfaces;
 
 public interface IPaymentGateway
 {

@@ -1,4 +1,4 @@
-using BillingApp.Application.Interfaces;
+using BillingApp.Infrastructure.Interfaces;
 using BillingApp.Infrastructure.PaymentGateways;
 using Moq;
 using Xunit;

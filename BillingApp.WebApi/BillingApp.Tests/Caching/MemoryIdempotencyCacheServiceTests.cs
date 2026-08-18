@@ -1,5 +1,5 @@
-using BillingApp.Application.Models;
 using BillingApp.Infrastructure.Caching;
+using BillingApp.Infrastructure.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Xunit;
 

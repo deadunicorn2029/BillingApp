@@ -1,5 +1,5 @@
-using BillingApp.Application.Interfaces;
-using BillingApp.Application.Models;
+using BillingApp.Infrastructure.Interfaces;
+using BillingApp.Infrastructure.Models;
 
 namespace BillingApp.Tests.TestDoubles;
 

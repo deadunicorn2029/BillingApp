@@ -1,5 +1,5 @@
+using BillingApp.Application.Dtos;
 using BillingApp.Application.Interfaces;
-using BillingApp.Application.Models;
 using BillingApp.WebApi.Contracts;
 using BillingApp.WebApi.Controllers;
 using Microsoft.AspNetCore.Http;
@@ -23,7 +23,7 @@ public class OrdersControllerTests
     [Fact]
     public async Task SubmitOrder_SuccessfulPayment_ReturnsOkWithReceipt()
     {
-        var receipt = new Receipt
+        var receipt = new OrderReceipt
         {
             OrderNumber = "ORD-1",
             Amount = 25.5m,
@@ -31,8 +31,8 @@ public class OrdersControllerTests
             ConfirmationCode = "CONF-1"
         };
         var service = new Mock<IOrderProcessingService>();
-        service.Setup(s => s.ProcessAsync(It.IsAny<Order>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new OrderProcessingResult { Success = true, Receipt = receipt });
+        service.Setup(s => s.ProcessAsync(It.IsAny<OrderRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new OrderResult { Success = true, Receipt = receipt });
 
         var sut = new OrdersController(service.Object);
 
@@ -46,8 +46,8 @@ public class OrdersControllerTests
     public async Task SubmitOrder_DeclinedPayment_Returns402WithErrorResponse()
     {
         var service = new Mock<IOrderProcessingService>();
-        service.Setup(s => s.ProcessAsync(It.IsAny<Order>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new OrderProcessingResult { Success = false, ErrorMessage = "Payment declined." });
+        service.Setup(s => s.ProcessAsync(It.IsAny<OrderRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new OrderResult { Success = false, ErrorMessage = "Payment declined." });
 
         var sut = new OrdersController(service.Object);
 
@@ -60,24 +60,24 @@ public class OrdersControllerTests
     }
 
     [Fact]
-    public async Task SubmitOrder_MapsRequestFieldsOntoOrder()
+    public async Task SubmitOrder_MapsRequestFieldsOntoOrderRequest()
     {
-        Order? capturedOrder = null;
+        OrderRequest? captured = null;
         var service = new Mock<IOrderProcessingService>();
-        service.Setup(s => s.ProcessAsync(It.IsAny<Order>(), It.IsAny<CancellationToken>()))
-            .Callback<Order, CancellationToken>((order, _) => capturedOrder = order)
-            .ReturnsAsync(new OrderProcessingResult { Success = false, ErrorMessage = "n/a" });
+        service.Setup(s => s.ProcessAsync(It.IsAny<OrderRequest>(), It.IsAny<CancellationToken>()))
+            .Callback<OrderRequest, CancellationToken>((request, _) => captured = request)
+            .ReturnsAsync(new OrderResult { Success = false, ErrorMessage = "n/a" });
 
         var sut = new OrdersController(service.Object);
         var request = CreateRequest();
 
         await sut.SubmitOrder(request, CancellationToken.None);
 
-        Assert.NotNull(capturedOrder);
-        Assert.Equal(request.OrderNumber, capturedOrder!.OrderNumber);
-        Assert.Equal(request.UserId, capturedOrder.UserId);
-        Assert.Equal(request.PayableAmount, capturedOrder.PayableAmount);
-        Assert.Equal(request.PaymentGatewayId, capturedOrder.PaymentGatewayId);
-        Assert.Equal(request.Description, capturedOrder.Description);
+        Assert.NotNull(captured);
+        Assert.Equal(request.OrderNumber, captured!.OrderNumber);
+        Assert.Equal(request.UserId, captured.UserId);
+        Assert.Equal(request.PayableAmount, captured.PayableAmount);
+        Assert.Equal(request.PaymentGatewayId, captured.PaymentGatewayId);
+        Assert.Equal(request.Description, captured.Description);
     }
 }

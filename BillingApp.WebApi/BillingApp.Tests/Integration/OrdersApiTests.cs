@@ -1,6 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
-using BillingApp.Application.Models;
+using BillingApp.Application.Dtos;
 using BillingApp.WebApi.Contracts;
 using Microsoft.AspNetCore.Http;
 using Xunit;
@@ -36,7 +36,7 @@ public class OrdersApiTests : IClassFixture<TestWebApplicationFactory>
         var response = await _client.PostAsJsonAsync("/api/orders", CreateRequest($"IT-{Guid.NewGuid():N}"));
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var receipt = await response.Content.ReadFromJsonAsync<Receipt>();
+        var receipt = await response.Content.ReadFromJsonAsync<OrderReceipt>();
         Assert.NotNull(receipt);
         Assert.False(string.IsNullOrWhiteSpace(receipt!.ConfirmationCode));
     }
@@ -70,8 +70,8 @@ public class OrdersApiTests : IClassFixture<TestWebApplicationFactory>
         var firstResponse = await _client.PostAsJsonAsync("/api/orders", request);
         var secondResponse = await _client.PostAsJsonAsync("/api/orders", request);
 
-        var first = await firstResponse.Content.ReadFromJsonAsync<Receipt>();
-        var second = await secondResponse.Content.ReadFromJsonAsync<Receipt>();
+        var first = await firstResponse.Content.ReadFromJsonAsync<OrderReceipt>();
+        var second = await secondResponse.Content.ReadFromJsonAsync<OrderReceipt>();
 
         Assert.Equal(first!.ConfirmationCode, second!.ConfirmationCode);
         Assert.Equal(first.Timestamp, second.Timestamp);
