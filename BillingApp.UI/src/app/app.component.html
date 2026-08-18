@@ -1,0 +1,64 @@
+<main class="page">
+  <h1>Billing - Submit Order</h1>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="order-form">
+    <label>
+      Order number
+      <input type="text" formControlName="orderNumber" />
+      <span class="field-error" *ngIf="form.controls.orderNumber.invalid && form.controls.orderNumber.touched">
+        Order number is required.
+      </span>
+    </label>
+
+    <label>
+      User ID
+      <input type="text" formControlName="userId" />
+      <span class="field-error" *ngIf="form.controls.userId.invalid && form.controls.userId.touched">
+        User ID is required.
+      </span>
+    </label>
+
+    <label>
+      Payable amount
+      <input type="number" step="0.01" min="0.01" formControlName="payableAmount" />
+      <span class="field-error" *ngIf="form.controls.payableAmount.invalid && form.controls.payableAmount.touched">
+        Enter an amount greater than 0.
+      </span>
+    </label>
+
+    <label>
+      Payment gateway
+      <select formControlName="paymentGatewayId">
+        <option *ngFor="let gateway of gateways" [value]="gateway.id">{{ gateway.label }}</option>
+      </select>
+    </label>
+
+    <label>
+      Description (optional)
+      <input type="text" formControlName="description" />
+    </label>
+
+    <button type="submit" [disabled]="submitting">
+      {{ submitting ? 'Processing…' : 'Pay' }}
+    </button>
+  </form>
+
+  <section class="result success" *ngIf="receipt">
+    <h3>Payment successful</h3>
+    <dl>
+      <dt>Order number</dt>
+      <dd>{{ receipt.orderNumber }}</dd>
+      <dt>Amount</dt>
+      <dd>{{ receipt.amount | currency }}</dd>
+      <dt>Confirmation code</dt>
+      <dd>{{ receipt.confirmationCode }}</dd>
+      <dt>Timestamp</dt>
+      <dd>{{ receipt.timestamp | date: 'medium' }}</dd>
+    </dl>
+  </section>
+
+  <section class="result error" *ngIf="errorMessage">
+    <h2>Payment failed</h2>
+    <p>{{ errorMessage }}</p>
+  </section>
+</main>
